@@ -14,22 +14,20 @@ const toLowerCase = input => {
   }
 }
 ```
-
 声明式函数
 
 ```
 const toLowerCase = input => input.map(inp=>inp.toLowerCase)
 ```
-
 > 声明式优点: 更加简洁、易读、无须使用变量、便于维护
 
-### 1.2 React 元素
+### 1.2 React元素
 
 > 元素描述了屏幕上需要显示的内容
 
-`type`: **必选**，用于告诉 React 如何处理元素本身
+`type`: **必选**，用于告诉React如何处理元素本身
 
-> 如果 type 是字符串，表示元素为 DOM 节点，如果是函数，元素则是组件
+> 如果type是字符串，表示元素为DOM节点，如果是函数，元素则是组件
 
 `children`: **可选**，用于实现节点的嵌套
 
@@ -47,17 +45,15 @@ const toLowerCase = input => input.map(inp=>inp.toLowerCase)
     }
 }
 ```
-
-> 当元素的 type 属性是函数时，React 会调用它，传入 props 来取回底层元素。React 会一直对返回结果递归地执行相同的操作，直到取回完整的 DOM 节点树，然后就可以将它渲染到屏幕。
+> 当元素的type属性是函数时，React会调用它，传入props来取回底层元素。React会一直对返回结果递归地执行相同的操作，直到取回完整的DOM节点树，然后就可以将它渲染到屏幕。
 
 ### 1.3 忘掉所学的一切
 
-> 传统的模板方案实现的的分离大多数情况下只是一种假象。真相是，无论 JavaScript 和 HTML 写在什么地方，它们都是紧密耦合的。
+> 传统的模板方案实现的的分离大多数情况下只是一种假象。真相是，无论JavaScript和HTML写在什么地方，它们都是紧密耦合的。
 
-**React 尝试将模板渲染与逻辑控制放在一起处理**
+**React尝试将模板渲染与逻辑控制放在一起处理**
 
-React 组件的渲染方法如下
-
+React组件的渲染方法如下
 ```
 render() {
     return (
@@ -68,7 +64,7 @@ render() {
 }
 ```
 
-另外有一种 Css in JavaScript 的方案饱受争议
+另外有一种Css in JavaScript的方案饱受争议
 
 ```
 var divStyle = {
@@ -86,13 +82,13 @@ ReactDOM.render(
 
 ### 1.4 常见误解
 
--   React 是一个庞大的技术和工具集，要想使用它，就必须与包管理器、转译器、模块打包器以及无数的库打交道。
+- React是一个庞大的技术和工具集，要想使用它，就必须与包管理器、转译器、模块打包器以及无数的库打交道。
 
-> React 其实是一个很小的库。像之前使用 jQuery 或 Backbone 那样，我们可以在任何页面（甚至 JSFiddle）中使用它：只要在关闭主体元素前引入脚本即可
+> React其实是一个很小的库。像之前使用jQuery或Backbone那样，我们可以在任何页面（甚至JSFiddle）中使用它：只要在关闭主体元素前引入脚本即可
 
-React 拆分成了两个包：核心包 react 实现了 React 库的核心特性，react-dom 则包含了与浏览器相关的所有特性.
+React拆分成了两个包：核心包react实现了React库的核心特性，react-dom则包含了与浏览器相关的所有特性.
 
-> 我们可以使用 create-react-app 快速创建 React 应用
+> 我们可以使用create-react-app快速创建React应用
 
 ```
 npm install -g create-react-app
@@ -102,21 +98,21 @@ create-react-app hello-world
 npm start
 ```
 
----
+***
 
 ## 2、整理代码
 
 ### 2.1 JSX
 
-> React 中两种定义元素的方式： JavaScript、 JSX
+> React中两种定义元素的方式： JavaScript、 JSX   
 
 ![image](https://cdn.cnbj1.fds.api.mi-img.com/book/images/b1ff4acb01a865971821d06b74fe2680?thumb=1&w=512&h=512)
 
-> JSX 将 JavaScript 和 HTML 写在一起,标签的开始和闭合让 DOM 树结构更加便于阅读
+> JSX将JavaScript和HTML写在一起,标签的开始和闭合让DOM树结构更加便于阅读
 
 #### 2.1.2 Babel
 
-> Babel 是目前最流行的 JavaScript 编译器，可以将 JSX 和 ES6 语法转译成标准 ES5 语法
+> Babel 是目前最流行的JavaScript编译器，可以将JSX和ES6语法转译成标准ES5语法
 
 安装方式
 
@@ -124,19 +120,19 @@ npm start
 npm install --global babel-cli
 ```
 
-使用 Babel 转译
+使用Babel转译
 
 ```
 babel source.js -o output.js
 ```
 
-Babel 强大之处在与可以灵活配置，也有很多非常有用的预设配置
+Babel强大之处在与可以灵活配置，也有很多非常有用的预设配置
 
-```
+``` 
 npm install --global babel-preset-es2015 babel-preset-react
 ```
 
-安装后新建.babelrc 配置文件
+安装后新建.babelrc配置文件
 
 ```
 {
@@ -146,14 +142,13 @@ npm install --global babel-preset-es2015 babel-preset-react
     ]
 }
 ```
-
 配置完成
 
 #### 2.1.2 Hello, World!
 
-#### 2.1.3 DOM 元素与 React 组件
+#### 2.1.3 DOM元素与React组件
 
-> HTML 元素和 React 元素的区别是，React 组件以大写字母开头
+> HTML元素和React元素的区别是，React组件以大写字母开头
 
 ```
 <button />  =>  React.createELement('button')
@@ -161,11 +156,11 @@ npm install --global babel-preset-es2015 babel-preset-react
 <Button />  =>  React.createELement(Button)
 ```
 
-React 组件支持自闭合标签
+React组件支持自闭合标签
 
 #### 2.1.4 属性
 
-> JSX 可以非常方便地书写包含属性的 DOM 元素或 React 组件。实际上，用 XML 设置元素属性就很简单
+> JSX可以非常方便地书写包含属性的DOM元素或React组件。实际上，用XML设置元素属性就很简单
 
 JSX:
 
@@ -173,7 +168,7 @@ JSX:
 <img src="https://facebook.github.io/react/img/logo.svg" alt="React.js" />
 ```
 
-等效 JavaScript 为
+等效JavaScript为
 
 ```
 React.createElement("img", {
@@ -186,7 +181,7 @@ React.createElement("img", {
 
 #### 2.1.5 子元素
 
-JSX 实现方式为
+JSX实现方式为
 
 ```
 <div>
@@ -194,7 +189,7 @@ JSX 实现方式为
 </div>
 ```
 
-等效 JavaScript 方式为
+等效JavaScript方式为
 
 ```
 React.createElement(
@@ -208,37 +203,37 @@ React.createElement(
 )
 ```
 
-> JSX 中可以使用函数和变量，使用花括号包裹表达式即可
+> JSX中可以使用函数和变量，使用花括号包裹表达式即可
 
 ```
 <a href={this.makeHref()}>Click me!</a>
 ```
 
-#### 2.1.6 JSX 和 HTML 的区别
+#### 2.1.6 JSX和HTML的区别
 
--   属性
+- 属性
 
-> 我们需要使用 className 代替 Class，htmlFor 代替 for
+> 我们需要使用className代替Class，htmlFor代替for
 
--   样式
+- 样式
 
-> style 接受 JavaScript 对象，样式属性名写法为驼峰式命名
+> style接受JavaScript对象，样式属性名写法为驼峰式命名
 
 ```
 <div style={{ backgroundColor: 'red' }} />
 ```
 
--   根元素
+- 根元素
 
-> JSX 最终会被转译成 JavaScript 函数,因为不能同时返回两个函数，所以 JSX 只能有一个根元素包裹
+> JSX最终会被转译成JavaScript函数,因为不能同时返回两个函数，所以JSX只能有一个根元素包裹
 
--   空格
+- 空格
 
-> DOM 换行不会被解析成空格，需要显示插入空格 {' '}
+> DOM换行不会被解析成空格，需要显示插入空格 {' '}
 
--   布尔值属性
+- 布尔值属性
 
-> 如果一个属性没有赋值，那么其默认值为 true
+> 如果一个属性没有赋值，那么其默认值为true
 
 ```
 <button disabled />
@@ -248,7 +243,7 @@ React.createElement("button", { disabled: true });
 
 #### 2.1.7 展开属性
 
-> 来源于 ECMAScript 提案中的对象剩余/展开属性，该特性可以非常方便地为元素传递 JavaScript 对象的全部属性
+> 来源于ECMAScript提案中的对象剩余/展开属性，该特性可以非常方便地为元素传递JavaScript对象的全部属性
 
 **向子元素传递数据时，不要以引用方式传递，提倡传值方式**
 
@@ -259,13 +254,13 @@ const foo = { id: 'bar' }
 return <div {...foo} />
 ```
 
-#### 2.1.8 JavaScript 模板
+#### 2.1.8 JavaScript模板
 
-> 将模板移到组件内部而不用外部模板库可以利用 JavaScript 的完整功能,如展开属性、用花括号封装 JavaScript 表达式
+> 将模板移到组件内部而不用外部模板库可以利用JavaScript的完整功能,如展开属性、用花括号封装JavaScript表达式
 
 #### 2.1.9 常见模式
 
--   多行书写
+- 多行书写
 
 ```
 <div>
@@ -276,7 +271,7 @@ return <div {...foo} />
 </div>
 ```
 
--   多个属性的书写
+- 多个属性的书写
 
 > 常见的解决方案是一行书写一个属性，同时缩进一个层级，并保持结尾括号和开始标签对齐
 
@@ -288,7 +283,7 @@ return <div {...foo} />
 />
 ```
 
--   条件语句
+- 条件语句
 
 ```
 <div>
@@ -310,9 +305,7 @@ get canShowSecretData() {
     {this.canShowSecretData && <SecretData />}
 </div>
 ```
-
-也可以引入外部依赖库 render-if
-
+也可以引入外部依赖库render-if
 ```
 npm install --save render-if
 
@@ -325,8 +318,7 @@ const canShowSecretData = renderIf(
     {canShowSecretData(<SecretData />)}
 </div>
 ```
-
-另一个工具库 react-only-if
+另一个工具库react-only-if
 
 ```
 npm install --save react-only-if
@@ -335,7 +327,7 @@ const SecretDataOnlyIf = onlyIf(
  ({ dataIsReady, isAdmin, userHasPermissions }) => {
     return dataIsReady && (isAdmin || userHasPermissions)
  })(SecretData)
-
+ 
 <div>
     <SecretDataOnlyIf
         dataIsReady={...}
@@ -345,7 +337,7 @@ const SecretDataOnlyIf = onlyIf(
 </div>
 ```
 
--   循环
+- 循环
 
 ```
 <ul>
@@ -353,15 +345,15 @@ const SecretDataOnlyIf = onlyIf(
 </ul>
 ```
 
--   控制语句
+- 控制语句
 
-> 使用 Babel 插件 jsx-control-statements 可以提高代码的可读性
+> 使用Babel插件jsx-control-statements可以提高代码的可读性
 
 ```
 npm install --save jsx-control-statements
 ```
 
-在.babelrc 中加入插件列表
+在.babelrc中加入插件列表
 
 ```
 "plugins": ["jsx-control-statements"]
@@ -376,16 +368,14 @@ npm install --save jsx-control-statements
 ```
 
 循环中使用
-
 ```
 <ul>
     <For each="user" of={this.props.users}>
-        <li>{user.name}</li>
+        <li>{user.name}</li>  
     </For>
 </ul>
 ```
-
--   次级渲染
+- 次级渲染
 
 > 代码量多到难以维护时，可以将其拆分成更小的方法，同时又将所有逻辑都保留在原有组件内部
 
@@ -397,7 +387,7 @@ renderUserMenu() {
 renderAdminMenu() {
     // JSX用于管理员菜单
 }
-
+    
 render() {
     return (
         <div>
@@ -408,16 +398,14 @@ render() {
     )
 }
 ```
-
 > 这种方案并不总是可以当作最佳实践，因为显然拆分组件的做法更好。有时这样做只是为了保持渲染方法简洁
 
 ### 2.2 ESLint
 
-> 可以帮助我们在输入过程中检查代码的正确性,避免语法错误  
-> linter 不仅能帮助我们更少犯错，或者至少更早发现错误，它还能强制推行一些常见的编程风格指南
+> 可以帮助我们在输入过程中检查代码的正确性,避免语法错误    
+linter不仅能帮助我们更少犯错，或者至少更早发现错误，它还能强制推行一些常见的编程风格指南
 
 #### 2.2.1 安装
-
 ```
 npm install --global eslint
 
@@ -426,8 +414,7 @@ eslint source.js
 
 #### 2.2.2 配置
 
-根目录创建.eslintrc 配置 rules
-
+根目录创建.eslintrc配置rules
 ```
 {
     "rules": {
@@ -435,16 +422,14 @@ eslint source.js
     }
 }
 ```
+> "semi"是规则名，[2, "never"]是规则的值 
 
-> "semi"是规则名，[2, "never"]是规则的值
+ESLint规则具有决定问题严重程度的三个等级：
+- off（或者0）：禁用规则
+- warn（或者1）：规则会产生警告
+- error（或者2）：规则会抛出错误
 
-ESLint 规则具有决定问题严重程度的三个等级：
-
--   off（或者 0）：禁用规则
--   warn（或者 1）：规则会产生警告
--   error（或者 2）：规则会抛出错误
-
-#### 2.2.3 React 插件
+#### 2.2.3 React插件
 
 ESLint 支持使用插件进行扩展
 
@@ -458,8 +443,7 @@ npm install --global eslint-plugin-react
 "plugins": ["react"]
 ```
 
-可以使用 extends 加入默认配置项
-
+可以使用extends加入默认配置项
 ```
 "extends": [
     "eslint:recommended",
@@ -467,22 +451,1124 @@ npm install --global eslint-plugin-react
 ]
 ```
 
+#### 2.2.4 Airbnb的配置
+
+> React领域最流行的配置之一莫过于Airbnb的那一套。Airbnb的开发者按照React的最佳实践创建了一套规则集，你可以直接在代码库中使用，无须自己手动判断启用哪条规则
+
+```
+npm install --global eslint-config-airbnbeslint@^2.9.0 eslint-plugin-jsx-a11y@^1.2.0 eslint-plugin-import@^1.7.0 eslint-plugin-react@^5.0.1
+
+// .eslintrc中配置
+{ 
+    "extends": "airbnb"
+}
+```
+### 2.3 函数式编程基础
+
+> 函数式编程是一种声明式范式，能够避免代码副作用，同时它推崇数据不可变，以便更易维护和考量代码
+
+#### 2.3.1 一等对象
+
+- 一等对象：可以赋给变量，也可以作为参数传递给其他函数
+- 高阶函数：接受一个函数作为参数，也可以传入其他参数，最后返回另一个函数
+
+```
+const add = (x, y) => x + y
+const log = func => (...args) => {
+    console.log(...args)
+    return func(...args)
+}
+const logAdd = log(add)
+```
+
+#### 2.3.2 纯粹性
+
+> 纯函数是指它不产生副作用，也就是说它不会改变自身作用域以外的任何东西。
+每次输入都能得到相同的输出
+
+```
+const add = (x, y) => x + y
+```
+
+非纯函数如下（改变了全局变量）
+
+```
+let x = 0
+const add = y => (x = x + y)
+```
+
+#### 2.3.3 不可变性
+
+> 不可变性: 在函数式编程中，函数不会修改变量值，而是创建新的变量，赋新值后再返回变量
+
+```
+const add3 = arr => arr.concat(3)
+const myArr = [1, 2]
+const result1 = add3(myArr) // [1, 2, 3]
+const result2 = add3(myArr) // [1, 2, 3]
+```
+
+#### 2.3.4 柯里化
+
+> 柯里化过程就是将多参数函数转换成单参数函数，这些单参数函数的返回值也是函数
+
+```
+const add = x => y => x + y
+
+const add1 = add(1)
+add1(2) // 3
+add1(3) // 4
+```
+
+#### 2.3.5 组合
+
+> 函数（和组件）可以结合产生新函数，从而提供更高级的功能与属性
+
+```
+const add = (x, y) => x + y
+const square = x => x * x
+// 组合后
+const addAndSquare = (x, y) => square(add(x, y))
+```
+
+#### 2.3.6 函数式编程与UI
+
+> 将创建UI的组件看作传入应用状态的函数，组件可以组合形成最后的UI
+
+***
+
 ## 3、开发真正可复用的组件
+
+### 3.1 创建类
+
+#### 3.1.1 createClass工厂方法
+
+```
+const Button = React.createClass({
+    render() {
+        return <button />
+    }
+})
+```
+
+#### 3.1.2 继承React.Component
+
+```
+const Button = React.Component({
+    render() {
+        return <button />
+    }
+})
+```
+
+#### 3.1.3 主要区别
+
+- prop 参数接受方式
+
+```
+// 1、createClass
+const Button = React.createClass({
+    propTypes: {
+        text: React.PropTypes.string
+    },
+    getDefaultProps() {
+        return {
+            text: 'Click me!'
+        } 
+    }
+    render() {
+        return <button>{this.props.text}</button>
+    }
+})
+
+// 2、Component
+class Button extends React.Component {
+    render() {
+        return <button>{this.props.text}</button>
+    }
+}　
+
+Button.propTypes = {
+    text: React.PropTypes.string
+}　
+
+Button.defaultProps = {  text: 'Click me!'}
+```
+
+> 因为类属性仍处于草案阶段，所以若想定义类的属性，则需要在创建类之后再写入属性(babel插件支持)
+
+使用类的好处在于，只需要在JavaScript对象上定义属性，无须使用getDefaultProps这种React特有的函数
+
+- 状态
+
+```
+// 1、createClass
+const Button = React.createClass({
+    getInitialState() {
+        return {
+            text: 'Click me!'
+        }
+    }
+    
+    render() {
+        return <button>{this.state.text}</button>
+    }
+})
+
+// 2、Component
+class Button extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            text: 'Click me!'
+        }
+    }
+    
+    render() {    
+        return <button>{this.state.text}</button> 
+    }
+}
+```
+> 在ES2015中，若想在子类中使用this，必须先调用super方法.React还会将props对象传给父组件。
+
+使用类的好处与前面所说的一样，即无须使用React特有的API，直接在实例上定义属性
+
+- 自动绑定
+
+createClass允许我们创建事件处理器，并且当调用事件处理器时，`this`会指向组件本身
+
+```
+const Button = React.createClass({  
+    handleClick() {    
+        console.log(this)  
+    }  
+    
+    render() {    
+        return <button onClick={this.handleClick} />  
+    }
+})
+```
+
+> 解决Component函数绑定问题的最佳方案是在构造器内进行绑定操作，这样即使多次渲染组件，它也不会发生任何改变
+
+```
+class Button extends React.Component {  
+    constructor(props) {    
+        super(props)　    
+        this.handleClick = this.handleClick.bind(this)  
+    }　  
+    
+    handleClick() {    
+        console.log(this)  
+    }　  
+    
+    render() {    
+        return <button onClick={this.handleClick} />  
+    }
+}
+```
+另一种方式可以将handleClick使用箭头函数命名
+
+```
+handleClick = () => {    
+    console.log(this)  
+}
+```
+
+#### 3.1.4　无状态函数式组件
+
+```
+() => <button />
+```
+### 3.2 状态
+
+#### 3.2.1 外部库
+
+常用的外部库: `redux` 和 `mobx`
+
+#### 3.2.2 工作原理
+
+> 每个有状态的React应用都可以拥有初始状态
+
+- 在组件的生命周期中，可以使用生命周期方法或者事件处理器中的setState多次修改状态。当状态发生变化时，React就用新状态渲染组件
+- 将任意函数作为setState的第二个参数传递，状态更新完成时会触发该函数，同时组件完成渲染
+
+#### 3.2.3　异步
+
+> setState方法是异步的
+
+发生这种情况的原因在于React知道如何优化事件处理器内部的状态更新，并进行批处理，以获得更好的性能。
+
+React无法优化执行过程，只能尝试尽快更新状态:
+
+```
+handleClick() {
+    setTimeout(() => {   
+        this.setState({      
+            clicked: true,    
+        })　    
+        console.log('the state is now', this.state)  
+    })
+}
+```
+
+结果将是：the state is now Object {clicked: true}
+
+
+#### 3.2.4　React lumberjack
+
+引入react-lumberjack包后可以调试应用的某个特殊状态
+
+```
+// 回退并撤销状态的改变
+Lumberjack.back()
+// 前进并重新应用状态的改变
+Lumberjack.forward()
+```
+
+#### 3.2.5　使用状态
+
+> 应该牢记只能将满足需求的最少数据放到状态中
+
+在以下场景下应该避免使用状态
+
+- 可派生的值
+> 只要能根据props计算最终值，就不应该将任何数据保存在状态中
+
+- 渲染方法
+> 始终牢记，设置状态会触发组件重新渲染。因此，应该只将渲染方法要用到的值保存在状态中
+
+![image](https://cdn.cnbj1.fds.api.mi-img.com/book/images/8efef8c34898bff17c9b92a6f5c93fcb?thumb=1&w=512&h=512)
+
+### 3.3 prop类型
+
+> 为了开发真正可复用的组件，需要尽可能清晰地定义组件接口
+
+```
+const Button = ({ text }) => <button>{text}</button>　
+
+Button.propTypes = {  
+    text: React.PropTypes.string.isRequired
+}
+```
+
+React提供了多种开箱即用的验证器：从数组到数字类型，再到组件类型.某些情况下不可避免地要传递对象，此时需要用模型来定义propType。模型函数允许我们声明包含嵌套属性的对象，并为每个属性定义类型。
+
+```
+const Profile = ({ user }) =>(  
+<div>{user.name} {user.surname}</div>
+)　
+
+Profile.propTypes = {  
+    user: React.PropTypes.shape({    
+        name: React.PropTypes.string.isRequired,    
+        surname: React.PropTypes.string,  
+    }).isRequired
+}
+
+```
+
+如果React现有的propTypes无法满足需求，那么我们可以创建自定义函数来验证属性
+
+```
+user: React.PropTypes.shape({  
+    age: (props, propName) => {
+        if (!(props[propName] > 0 && props[propName] < 100)) {      
+            return new Error(`${propName} must be between 1 and 99`)    
+        }    
+        return null  
+    }
+})
+```
+
+- React Docgen 插件可以读取组件并生成文档形式
+
+### 3.4 可复用组件
+
+```
+class PostList extends React.Component {
+    constructor(props) {  
+        super(props)　  
+        this.state = {    
+            posts: [],  
+        }
+    }
+    
+    const List = ({ collection, textKey, titleKey }) => (  
+        <ul>
+            {collection.map(item =>     
+                <Item  
+                    key={item.id} 
+                    text={item[textKey]} 
+                    title={item[titleKey]}
+                />    
+            )}  
+        </ul>
+    )
+    
+    List.propTypes = {  
+        collection: React.PropTypes.array,  
+        textKey: React.PropTypes.string,  
+        titleKey: React.PropTypes.string
+    }
+    
+    const Item = ({ text, title }) => (  
+        <li>
+            <h1>{title}</h1>    
+            {text && <p>{text}</p>}  
+        </li>
+    )　
+    
+    Item.propTypes = {  
+        text: React.PropTypes.string,  
+        title: React.PropTypes.string
+    }
+    
+    const UserList = ({ users }) => ( 
+        <List    
+            collection={users}    
+            textKey="bio"    
+            titleKey="username"  
+        />
+    )
+    
+    render() {  
+        return (    
+            <List      
+                collection={this.state.posts}     
+                textKey="excerpt"     
+                titleKey="title"    
+            />  
+        )
+    }
+}
+```
+
+### 3.5　可用的风格指南
+
+> 创建接受清晰的prop并与数据解耦的简洁组件是与团队其他成员共享基础组件库的最佳方式。
+
+`React Storybook`插件分离了组件，因此无须运行整个应用就能渲染单个组件，以上文list为例
+
+
+```
+npm install --save @kadira/react-storybook-addon
+
+import { storiesOf } from '@kadira/storybook'
+
+storiesOf('List', module)  
+    .add('without text field', () => (    
+        <List collection={posts} titleKey="title" /> 
+    ))
+    
+// 先在应用的根文件夹下创建.storybook文件夹。
+// 然后在.storybook文件夹下创建config.js文件来加载故事文档：
+
+import { configure } from '@kadira/storybook'　
+
+function loadStories() {  
+    require('../src/stories/list')
+}　
+
+configure(loadStories, module)
+
+// 从库中导入配置函数，然后定义另一个函数按照每条故事文档的路径加载它们。接着将该函数传给配置函数
+
+"storybook": "start-storybook -p 9001"
+```
 
 ## 4、组合一切
 
+### 4.1 组件间的通信
+
+> children是一个特殊的prop，拥有者组件可以将它传递给渲染方法内定义的组件
+
+
+```
+const Button = ({ children }) => (  
+    <button className="btn">{children}</button>
+)　
+
+Button.propTypes = {  
+    children: React.PropTypes.array
+}
+```
+Button组件就不再局限于简单的单个文本属性了，现在我们可以将任何元素传递给它，然后在children属性的位置上渲染出来
+
+### 4.2 容器组件与表现组件模式
+
+> React组件通常包含杂合在一起的逻辑与表现。逻辑一般指与UI无关的那些东西，如API的调用、数据操作以及事件处理器。表现则是指渲染方法中创建元素用来显示UI的部分
+
+按照`容器组件`与`表现组件`的模式创建组件可以帮助我们分离上述两个关注点
+
+我们在组件文件夹下创建 geolocation.js 并定义Geolocation组件
+
+
+```
+class Geolocation extends React.Component{
+    constructor(props) {  
+        super(props)　  
+        this.state = {    
+            latitude: null,    
+            longitude: null
+        }　  
+        
+        this.handleSuccess = this.handleSuccess.bind(this)
+    }
+    
+    componentDidMount() {  
+        if (navigator.geolocation) {                     navigator.geolocation.getCurrentPosition(this.handleSuccess)
+        }
+    }
+    
+    handleSuccess({ coords }) {  
+        this.setState({    
+            latitude: coords.latitude,    
+            longitude: coords.longitude
+        })
+    }
+    
+    render() {  
+        return (    
+            <div>      
+                <div>Latitude: {this.state.latitude}</div>     
+                <div>Longitude: {this.state.longitude}</div>    
+            </div>
+        )
+    }
+        
+}
+```
+我们将逻辑处理放在container容器组件中，表现组件靠传入的prop渲染
+
+
+```
+// 容器组件
+class GeolocationContainer extends React.Component{
+    render() {  
+        return (    
+            <Geolocation {...this.state} />  
+        )
+    }
+}
+
+// 表现组件
+const Geolocation = ({ latitude, longitude }) => (  
+    <div>    
+        <div>Latitude: {latitude}</div>    
+        <div>Longitude: {longitude}</div> 
+    </div>
+)
+
+Geolocation.propTypes = {  
+    latitude: React.PropTypes.number,  
+    longitude: React.PropTypes.number
+}
+```
+
+**容器组件** 
+- 更关心行为部分；
+- 负责渲染对应的表现组件；
+- 发起API请求并操作数据；
+- 定义事件处理器；
+- 写作类的形式。
+
+**表现组件** 
+- 更关心视觉表现；
+- 负责渲染HTML标记（或其他组件）；
+- 以props的形式从父组件接收数据；
+- 通常写作无状态函数式组件。
+
+### 4.3 mixin
+
+> 当需要在不同组件间共享功能时，可以使用mixin
+
+**mixin只能和`createClass`工厂方法搭配使用，因此如果你用的是类，那么就不能使用mixin，这也正是不推荐使用它们的原因之一**
+
+
+```
+const WindowResize = {...}
+
+getInitialState() {  
+    return {    
+        innerWidth: window.innerWidth
+    }
+}
+
+componentDidMount() {  
+    window.addEventListener('resize', this.handleResize)
+}
+
+componentWillUnmount() {  
+    window.removeEventListener('resize', this.handleResize)
+}
+
+handleResize() {  
+    this.setState({    
+        innerWidth: window.innerWidth
+    })
+}
+```
+在组件中使用
+
+```
+const MyComponent = React.createClass({　
+    mixins: [WindowResize],　  
+    render() {    
+        console.log('window.innerWidth', this.state.innerWidth)
+    }
+})
+```
+> mixin具有一项很棒的特性，这个特性允许它们合并生命周期方法和初始状态
+
+**存在的问题**
+
+- 可维护性差
+- 可能存在**冲突**
+- mixin间的耦合导致组件重构和应用扩展变得非常困难
+
+### 4.4 高阶组件
+
+> 当高阶函数概念应用在组件上时，我们将它简称为高阶组件。
+
+
+```
+const HoC = Component => EnhancedComponent
+
+const withClassName = Component => props => (  
+    <Component {...props} className="my-class" />
+)
+
+const MyComponent = ({ className }) => (  
+    <div className={className} />
+)
+
+MyComponent.propTypes = {  
+    className: React.PropTypes.string
+}
+
+const MyComponentWithClassName = withClassName(MyComponent)
+
+// 使用高阶函数实现mixin
+
+const withInnerWidth = Component => (
+    class extends React.Component {
+        constructor(props) {  
+            super(props)　  
+            this.state = {    
+                innerWidth: window.innerWidth
+            }　  
+            this.handleResize = this.handleResize.bind(this)
+        }
+        
+        componentDidMount() {  
+            window.addEventListener('resize', this.handleResize)
+        }
+        
+        componentWillUnmount() {  
+            window.removeEventListener('resize', this.handleResize)
+        }
+        
+        handleResize() {  
+            this.setState({    
+                innerWidth: window.innerWidth
+            })
+        }
+        
+        render() {  
+            return <Component {...this.props} {...this.state} />
+        }
+    }
+)
+
+const MyComponent = ({ innerWidth }) => {  
+    console.log('window.innerWidth', innerWidth)
+}
+
+MyComponent.propTypes = {  
+    innerWidth: React.PropTypes.number
+}
+
+const MyComponentWithInnerWidth = withInnerWidth(MyComponent)
+```
+
+优点：
+- 没有污染任何状态
+- 不需要组件来实现任何方法
+
+### 4.5 recompose
+
+> recompose提供了许多有用的高阶组件，而且可以优雅地`组合`它们
+
+
+```
+const Profile = ({ username, age }) => (  
+    <div>    
+        <div>Username: {username}</div>    
+        <div>Age: {age}</div>  
+    </div>
+)　
+
+Profile.propTypes = {  
+    username: React.PropTypes.string,  
+    age: React.PropTypes.number
+}
+
+// 然后用高阶组件进行增强：
+const ProfileWithFlattenUser = flattenProp('user')(Profile)
+
+// compose 可以将多个高阶组件传给该函数，最终会得到单个增强后的高阶组件
+const enhance = compose(  
+    flattenProp('user'),  
+    renameProp('username', 'name'),  
+    withInnerWidth
+)
+
+const EnhancedProfile = enhance(Profile)
+```
+compose可以将多个高阶组件传给该函数，最终会得到单个增强后的高阶组件，大大提升了代码可读性。
+
+> 不要滥用高阶组件，因为每层抽象都会带来一些问题(`性能问题`）。
+
+**`context`**
+
+> 高阶组件可以很方便地处理context，建议谨慎使用context，因为它仍处于试验阶段，未来可能会改变。
+
+context的最广泛用法就是将通用配置从根节点向下传递到叶节点
+
+
+```
+const Price = ({ value }, { currency }) => (
+    <div>{currency}{value}</div>
+)
+
+Price.propTypes = {  
+    value: React.PropTypes.number
+}　
+
+Price.contextTypes = {  
+    currency: React.PropTypes.string
+}
+```
+修改后
+
+```
+const Price = ({ currency, value }) => (      
+    <div>{currency}{value}</div>
+)　
+
+Price.propTypes = {  
+    currency: React.PropTypes.string,
+    value: React.PropTypes.number
+}
+
+// 再次用到偏函数写法对高阶组件进行特殊化处理，然后多次复用它
+const withCurrency = getContext({  
+    currency: React.PropTypes.string
+})
+
+const PriceWithCurrency = withCurrency(Price)
+```
+这样我们不需要修改父组件，还可以利用context特性且无须担心API未来会发生变化，而且Price组件也实现了可复用性
+
+### 4.6 函数子组件
+
+> 函数子组件模式：不按组件的形式传递子组件，而是定义一个可以从父组件接收参数的函数
+
+
+```
+const FunctionAsChild = ({ children }) => children()　
+
+FunctionAsChild.propTypes = {  
+    children: React.PropTypes.func.isRequired
+}
+
+// 用法
+<FunctionAsChild>  
+    {() => <div>Hello, World!</div>}
+</FunctionAsChild>
+```
+父组件向子组件传递参数
+
+
+```
+const Name = ({ children }) => children('World')　
+
+Name.propTypes = {  
+    children: React.PropTypes.func.isRequired
+}
+
+// 上述组件的用法如下所示：
+<Name>  
+    {name => <div>Hello, {name}!</div>}
+</Name>
+```
+优点：
+- 可以像高阶组件那样封装组件，在运行时为它们传递变量而不是固定属性
+- 不要求children函数使用预定义的prop名称
+- 封装器的可复用程度很高，因为它不关心子组件要接收什么，只期望传入一个函数
+
 ## 5、恰当地获取数据
+
+### 5.1　数据流
+
+> 单向数据流允许数据从根节点流向叶节点,它简化了组件行为以及组件间的关系，增强了代码的可预测性和可维护性
+
+创建一个counter类
+
+```
+class Counter extends React.Component{
+    constructor(props) {  
+        super(props)　  
+        this.state = {    
+            counter: 0
+        }　  
+        this.handleDecrement = this.handleDecrement.bind(this)  
+        this.handleIncrement = this.handleIncrement.bind(this)
+    }
+    
+    handleDecrement() {  
+        this.setState({    
+            counter: this.state.counter - 1
+        })
+    }　
+    
+    handleIncrement() {  
+        this.setState({
+            counter: this.state.counter 
+        })
+    }
+    
+    render() {  
+        return (    
+            <div>      
+                <h1>{this.state.counter}</h1>      
+                <button onClick={this.handleDecrement}>-</button>      
+                <button onClick={this.handleIncrement}>+</button>   
+            </div>
+        )
+    }
+}
+```
+
+#### 5.1.1　子组件与父组件的通信（回调函数）
+
+Counter组件职责：
+- 将计数器的值保存在状态中
+- 负责显示数据
+- 包含增加和减少计数器值的逻辑
+
+组件化，先创建button组件
+
+```
+const Buttons = ({ onDecrement, onIncrement }) => (
+    <div>    
+        <button onClick={onDecrement}>-</button>    
+        <button onClick={onIncrement}>+</button>  
+    </div>
+)　
+
+Buttons.propTypes = {  
+    onDecrement: React.PropTypes.func,  
+    onIncrement: React.PropTypes.func
+}
+
+// 新组件替换原有标记即可
+render() {  
+    return (    
+        <div>      
+            <h1>{this.state.counter}</h1>      
+            <Buttons        
+                onDecrement={this.handleDecrement}
+                onIncrement={this.handleIncrement}      
+            />    
+        </div>  
+    )
+}
+```
+每当子组件需要向父组件推送数据或者通知父组件发生了某个事件时，可以传递回调函数，同时将其余逻辑放在父组件中
+
+#### 5.1.2　公有父组件
+创建一个Display组件来接收所需的值并在屏幕上显示
+
+```
+onst Display = ({ counter }) => <h1>{counter}</h1>　
+
+Display.propTypes = {  
+    counter: React.PropTypes.number
+}
+
+// 用Display组件替换旧标记
+render() {  
+    return (
+        <div>      
+            <Display counter={this.state.counter} />      
+            <Buttons        
+                onDecrement={this.handleDecrement}  
+                onIncrement={this.handleIncrement}      
+            />    
+        </div>
+    )
+}
+```
+Buttons组件会通知父组件，然后父组件会将更新后的值发送给Display组件。这种模式在React中很常见，而且它可以有效地在没有直接联系的组件间共享数据
+
+> 数据始终从父组件流向子组件，但子组件可以发送通知给父组件，以便组件树按照新的数据重新渲染
+
+### 5.2　数据获取
+
+我们创建一个简单的gists列表
+
+
+```
+class Gists extends React.Component{
+    constructor(props) { 
+        super(props)　 
+        this.state = { 
+            gists: [] 
+        }
+    }
+    
+    componentDidMount() {  
+        fetch('https://api.github.com/users/gaearon/gists')    
+            .then(response => response.json())    
+            .then(gists => this.setState({ gists }))
+    }
+    
+    render() {  
+        return (    
+            <ul>      
+                {this.state.gists.map(gist => (
+                    <li key={gist.id}>{gist.description}</li>      
+                ))}    
+            </ul>  
+        )
+    }
+}
+```
+高阶组件实现
+
+
+```
+const withData = url => Component => (
+    class extends React.Component{
+        constructor(props) {  
+            super(props)　  
+            this.state = { 
+                data: []
+            }
+        }
+        
+        componentDidMount() {  
+            fetch(url)    
+                .then(response => response.json())    
+                .then(data => this.setState({ data }))
+        }
+        
+        render() {  
+            return <Component {...this.props} {...this.state} />
+        }
+    }
+)
+
+const List = ({ data: gists }) => (  
+    <ul>    
+        {gists.map(gist => (      
+            <li key={gist.id}>{gist.description}</li>    
+        ))}  
+    </ul>
+)　
+
+List.propTypes = {      
+    data: React.PropTypes.array
+}
+
+const withGists = withData('https://api.github.com/users/gaearon/gists')
+```
+`动态加载url`   
+> 修改高阶组件，让它接受两种类型的URL参数：一种是当前实现的字符串类型，另一种是函数，它接受组件的prop并根据传入的参数返回URL
+
+
+```
+componentDidMount() {  
+    const endpoint = typeof url === 'function' ? url(this.props) : url　  fetch(endpoint) 
+        .then(response => response.json())    
+        .then(data => this.setState({ data }))
+}
+
+const withGists = withData(
+    props => `https://api.github.com/users/${props.username}/gists`
+)
+
+<ListWithGists username="gaearon" />
+```
+
+### 5.3　react-refetch
+
+**使用react-refetch有效地替换高阶组件**
+
+
+```
+npm install react-refetch --save
+// 接着导入该模块的connect函数：
+import { connect } from 'react-refetch'
+
+const connectWithGists = connect(({ username }) => ({
+    gists: `https://api.github.com/users/${username}/gists`
+}))
+
+const ListWithGists = connectWithGists(List)
+```
+react-refetch库注入的属性与我们在connect函数中指定的键同名
+
+
+```
+// gists是一个promise对象，拥有pending和fulfilled、rejected状态
+const List = ({ gists }) => (  
+    gists.fulfilled && (    
+        <ul>      
+            {gists.value.map(gist => (        
+                <li key={gist.id}>{gist.description}</li>      
+            ))}
+        </ul>  
+    )
+)
+```
+为链接加星
+
+```
+const List = ({ gists }) => (  
+    gists.fulfilled && (    
+        <ul>      
+            {gists.value.map(gist => (        
+               Gist key={gist.id} {...gist} />
+            ))}
+        </ul>  
+    )
+)
+
+const Gist = ({ description }) => (  
+    <li>    
+        {description}    
+        <button>+1</button>  
+    </li>
+)
+
+Gist.propTypes = {  
+    description: React.PropTypes.string
+}
+
+
+const token = 'access_token=123'　
+const connectWithStar = connect(({ id }) => ({  
+    star: () => ({    
+        starResponse: {      
+            url: `https://api.github.com/gists/${id}/star?${token}`,      
+            method: 'PUT'
+        }
+    })
+}))
+
+const GistWithStar = connectWithStar(Gist)
+
+const Gist = ({ description, star }) => (  
+    <li>    
+        {description}    
+        <button onClick={star}>+1</button>  
+    </li>
+)　
+
+Gist.propTypes = {  
+    description: React.PropTypes.string，
+    star: React.PropTypes.func
+}
+```
+
 
 ## 6、为浏览器编写代码
 
+
+### 6.1 表单
+#### 6.1.1 自由组件
+#### 6.1.2 受控组件
+#### 6.1.3 JSON schema
+#### 6.2 事件
+#### 6.3 ref
+#### 6.4 动画
+#### 6.5 可扩展矢量图形
+
+
 ## 7、美化组件
+
+### 7.1 CSS in JavaScript
+### 7.2 行内样式
+### 7.3 Radium
+### 7.4 CSS模块
+#### 7.4.1 Webpack
+#### 7.4.2 搭建项目
+#### 7.4.3 局部作用域的CSS
+#### 7.4.4 原子级CSS模块
+#### 7.4.5 React CSS模块
+### 7.5 Styled Component
+
 
 ## 8、服务单渲染的乐趣与益处
 
+
+### 8.1 通用应用
+### 8.2 使用服务端渲染的原因
+#### 8.2.1 SEO
+#### 8.2.2 通用代码库
+#### 8.2.3 性能更强
+#### 8.2.4 不要低估复杂度
+### 8.3 基础示例
+### 8.4 数据获取示例
+### 8.5 Next.js
+
+
 ## 9、提升应用性能
+
+
+### 9.1 一致性比较与key属性
+### 9.2 优化手段
+#### 9.2.1 是否要更新组件
+#### 9.2.2 无状态函数式组件
+### 9.3 常用解决方案
+#### 9.3.1 why-did-you-update
+#### 9.3.2 在渲染方法中创建函数
+#### 9.3.3 props常量
+#### 9.3.4 重构与良好设计
+### 9.4 工具与库
+#### 9.4.1 不可变性
+#### 9.4.2 性能监控工具
+#### 9.4.3 Babel插件
+
 
 ## 10、测试与调试
 
+### 10.1 测试的好处
+### 10.2 用Jest轻松测试JavaScript
+### 10.3 灵活的测试框架Mocha
+### 10.4 React JavaScript测试工具
+### 10.5 真实测试示例
+### 10.6 React组件树快照测试
+### 10.7 代码覆盖率工具
+### 10.8 常用测试方案
+#### 10.8.1 测试高阶组件
+#### 10.8.2 页面对象模式
+### 10.9 React开发者工具
+### 10.10 React错误处理
+
 ## 11、需要避免的反模式
 
+### 11.1 用prop初始化状态
+### 11.2 修改状态
+### 11.3 将数组索引作为key
+### 11.4 在DOM元素上展开props对象
+
 ## 12、未来的行动
+
+### 12.1 为React做贡献
+### 12.2 分发代码
+### 12.3 发布npm包
+
