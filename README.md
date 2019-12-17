@@ -1890,17 +1890,196 @@ RedCircle.propTypes = {
 
 ### 7.1 CSS in JavaScript
 
+CSS 的主要问题
+
+![image](https://cdn.cnbj1.fds.api.mi-img.com/book/images/321fd2d58c8d897f522a2a56405e0b86?thumb=1&w=512&h=512)
+
+结论是：为了解决 Facebook 在使用大型 CSS 代码库时遇到的所有问题，可以采用**行内样式**
+
 ### 7.2 行内样式
 
+> React 官方文档推荐开发者在 React 组件上使用行内样式。
+
+行内样式书写规则
+
+-   属性名为 CSS 规则名
+-   属性值必须是字符串
+-   连字符的 CSS 规则名必须采用驼峰式
+-   厂商前缀必须以大写字母开头，ms 前缀要小写
+-   属性值为数字值时，可以不带引号或度量单位，默认是 px
+
+**优点：** 可以很好的与逻辑进行交互
+
+**缺点：**
+
+-   不能使用伪选择器和伪元素
+-   不能使用媒体查询
+-   不能使用样式回退
+-   不能 CSS 动画属性
+-   覆盖常规属性时只能使用 important
+-   调试困难
+-   如果使用服务端渲染应用，行内样式会使页面体积变大
+
 ### 7.3 Radium
+
+> Radium 函数是一个高阶组件,其工作原理就是为触发伪类行为的每个事件添加事件处理器，并监听这些事件
+
+```
+npm install --save radium
+
+import radium,  { StyleRoot }  from 'radium'　
+
+const styles = {
+    backgroundColor: '#ff0000',
+    width: 320,
+    padding: 20,
+    borderRadius: 5,
+    border: 'none',
+    outline: 'none',
+    ':hover': {
+        color: '#fff'
+    },
+    ':active': {
+        position: 'relative',
+        top: 2
+    },
+    '@media (max-width: 480px)': {
+        width: 160
+    },
+}
+
+const Button = () => <button style={styles>>Click me!</button>
+
+export default radium(Button)
+
+// 使用媒体查询时需要引入StyleRoot对元素进行包裹
+class App extends Component {
+    render() {
+        return (
+            <StyleRoot>
+                {Button()}
+            </StyleRoot>
+        )
+    }
+}
+```
 
 ### 7.4 CSS 模块
 
 #### 7.4.1 Webpack
 
+> Webpack 模块打包器十分流行，它的工作就是将应用的所有依赖加载到单个打包文件中，以便于在浏览器中运行
+
+理论上只要有对应的**加载器**就可以加载除 JavaScript 以外的任何依赖。比如 JSON 文件、图片以及其他资源、还能打包导入 CSS
+
 #### 7.4.2 搭建项目
 
+```
+// 新建一个空文件夹
+npm init
+// 生成package.json
+
+// 安装webpack插件依赖
+npm install --save-dev webpack webpack-dev-server webpack-cli
+// 安装Babel及其加载器
+npm install --save-dev babel-loader@7.0 babel-core babel-preset-es2015 babel-preset-react
+
+// 安装css加载器
+npm install --save-dev style-loader css-loader
+
+npm install --save-dev html-webpack-plugin
+
+npm install --save react react-dom
+
+// package.json中加入以下脚本
+"scripts": {
+    "start": "webpack-dev-server"
+}
+```
+
+新建一个`webpack.config.js`文件
+
+```
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+
+module.exports = {
+  entry: './index.js',
+  module: {
+    rules: [{
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['es2015', 'react']
+        }
+      },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader?modules'
+      }
+    ]
+  },
+  plugins: [new HtmlWebpackPlugin()]
+}
+```
+
+`npm run start`启动项目
+
 #### 7.4.3 局部作用域的 CSS
+
+新建 index.js 和 index.css 文件
+
+```
+// index.js
+import React from 'react'
+import ReactDOM from 'react-dom'
+import styles from './index.css'
+
+const Button = () => <button className={styles.button}>Click me!</button>
+
+ReactDOM.render(<Button />, document.body)
+
+// index.css
+.button {
+  background-color: #ff0000;
+  width: 320px;
+  padding: 20px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+}
+
+.button:hover {
+  color: #fff;
+}
+
+.button:active {
+  position: relative;
+  top: 2px;
+}
+
+@media (max-width: 480px) {
+  .button {
+    width: 160px
+  }
+}
+```
+
+css 模块特性
+
+-   **global** 给任何类添加:global 前缀，意味着请求 CSS 模块不要为当前选择器加上局部作用域。
+-   **组合** 可以从同个文件或者外部依赖中引用类名，将其他类的所有样式应用于一个元素。
+
+```
+.background-red {
+    background-color: #ff0000;
+}
+
+.button {
+    composes: background-red; // 看这里
+    width: 320px;
+}
+```
 
 #### 7.4.4 原子级 CSS 模块
 
