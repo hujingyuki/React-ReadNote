@@ -2,6 +2,8 @@
 
 ## 1、React 基础
 
+<details>
+    
 ### 1.1 声明式编程
 
 传统命令式函数
@@ -102,9 +104,11 @@ create-react-app hello-world
 npm start
 ```
 
----
+</details>
 
 ## 2、整理代码
+
+<details>
 
 ### 2.1 JSX
 
@@ -552,9 +556,11 @@ const addAndSquare = (x, y) => square(add(x, y))
 
 > 将创建 UI 的组件看作传入应用状态的函数，组件可以组合形成最后的 UI
 
----
+</details>
 
 ## 3、开发真正可复用的组件
+
+<details>
 
 ### 3.1 创建类
 
@@ -896,7 +902,11 @@ configure(loadStories, module)
 "storybook": "start-storybook -p 9001"
 ```
 
+</details>
+
 ## 4、组合一切
+
+<details>
 
 ### 4.1 组件间的通信
 
@@ -1231,7 +1241,11 @@ Name.propTypes = {
 -   不要求 children 函数使用预定义的 prop 名称
 -   封装器的可复用程度很高，因为它不关心子组件要接收什么，只期望传入一个函数
 
+</details>
+
 ## 5、恰当地获取数据
+
+<details>
 
 ### 5.1 　数据流
 
@@ -1511,7 +1525,11 @@ Gist.propTypes = {
 }
 ```
 
+</details>
+
 ## 6、为浏览器编写代码
+
+<details>
 
 ### 6.1 表单
 
@@ -1886,7 +1904,11 @@ RedCircle.propTypes = {
 }
 ```
 
+</details>
+
 ## 7、美化组件
+
+<details>
 
 ### 7.1 CSS in JavaScript
 
@@ -2083,11 +2105,80 @@ css 模块特性
 
 #### 7.4.4 原子级 CSS 模块
 
+> 原子级 CSS 是 CSS 的一种使用方式，即每个类只有一条规则
+
+这种方式很高效，但会导致标记上有太多类，很难预测结果
+
+**原子级 CSS 模块** 是指用 CSS 模块来解决原子级 CSS 的问题。
+
+```
+.title {
+    composes: mb0 fw6;
+}
+
+<h2 className={styles.title}>Hello React</h2>
+```
+
 #### 7.4.5 React CSS 模块
+
+使用第三方包来更好的使用 CSS 模块
+
+```
+npm install --save react-css-modules
+
+import cssModules from 'react-css-modules'
+
+const EnhancedButton = cssModules(Button, styles)
+
+// styleName会被转化成字符串形式的类名
+const Button = () => <button styleName="button">Click me!</button>
+```
 
 ### 7.5 Styled Component
 
-## 8、服务单渲染的乐趣与益处
+> 用现代手段解决组件样式问题，并在 React 中运用了 ES2015 的最新特性和其他高级技巧，实现了完善的样式方案
+
+需要用到 ES2015 的**标签模板字面量**特性，它可以向函数传递未经插值的模板字符串
+
+它支持所有 CSS 特性，伪类，伪元素、媒体查询等等
+
+```
+npm install --save styled-components
+
+import styled from 'styled-components'
+
+const Button = styled.button`
+    background-color: #ff0000;
+    width: 320px;
+    padding: 20px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    &:hover {
+        color: #fff;
+    }
+    &:active {
+        position: relative;
+        top: 2px;
+    }
+    @media (max-width: 480px) {
+        width: 160px;
+    }
+`
+```
+
+优点
+
+-   很方便的覆盖其样式
+-   可以设置不同属性来多次复用该组件
+-   还可以接受 props 更改样式
+-   拥有**主题**
+
+</details>
+
+## 8、服务端渲染的乐趣与益处
+
+<details>
 
 ### 8.1 通用应用
 
@@ -2107,7 +2198,11 @@ css 模块特性
 
 ### 8.5 Next.js
 
+</details>
+
 ## 9、提升应用性能
+
+<details>
 
 ### 9.1 一致性比较与 key 属性
 
@@ -2135,7 +2230,11 @@ css 模块特性
 
 #### 9.4.3 Babel 插件
 
+</details>
+
 ## 10、测试与调试
+
+<details>
 
 ### 10.1 测试的好处
 
@@ -2161,20 +2260,138 @@ css 模块特性
 
 ### 10.10 React 错误处理
 
+</details>
+
 ## 11、需要避免的反模式
+
+<details>
 
 ### 11.1 用 prop 初始化状态
 
+> 用父组件传来的 prop 初始化状态**往往**是一种反模式
+
+```
+class Counter extends React.Component{
+    constructor(props) {
+        super(props)　
+        this.state = {
+            count: props.count
+        }　
+        this.handleClick = this.handleClick.bind(this)
+    }
+
+    handleClick() {
+        this.setState({
+            count: this.state.count + 1,
+        })
+    }
+    render() {
+        return (
+            <div>
+                {this.state.count}
+                <button onClick={this.handleClick}>+</button>
+            </div>
+        )
+    }
+}
+```
+
+以上代码的问题
+
+-   我们违背了单一数据源原则；
+-   传给组件的 count 属性发生变化时，状态不会相应地更新
+
+props 命名时带有明确含义，表明该属性只在初始化时有用
+
 ### 11.2 修改状态
+
+必须使用 setState 进行状态的修改，否则可能出现以下问题
+
+-   状态改变不会触发组件重渲染
+-   以后无论何时调用 setState，之前修改的状态都会渲染到页面上
+-   直接修改状态会严重影响性能
 
 ### 11.3 将数组索引作为 key
 
+> key 属性唯一标识了 DOM 中的某个元素，所以 React 用其判断元素是否为新的，以及组件属性和状态改变时是否要更新元素
+
+通过对比得知，使用数组索引作为 key 和没有用 key 属性时一模一样
+
+因此我们使用 key 是最好能提供唯一且稳定的标识，以帮助 dom 更好的检查更新
+
 ### 11.4 在 DOM 元素上展开 props 对象
+
+> 我们常常会在元素上展开 props 对象，以避免手动编写每个属性，这种模式成为`反模式`
+
+```
+<Component {...props} />
+```
+
+缺点:
+
+-   添加未知 HTML 属性的风险
+-   展开符隐藏了我们所要传递的属性值，变得不清晰
+
+一种解决方式是创建一个专门用来存放有效 DOM 属性的对象,然后展开它
+
+```
+const Spread = props => <div {...props.domProps} />
+
+<Spread foo="bar" domProps={{ className: 'baz' }} />
+```
+
+</details>
 
 ## 12、未来的行动
 
+<details>
+
 ### 12.1 为 React 做贡献
+
+> React 开源，任何人都能参与修复 bug、编写文档，甚至添加新特性
+
+-   提交问题前先使用 JSFiddle 模板进行问题的复现
+-   排除 React 版本问题，遵循提交问题的准则
+-   贡献代码前遵循代码风格指南，并为补丁编写全面的测试
+-   确保新代码能通过现有所有测试，避免引入新的问题
+-   如果想加入新特性，需要先和 React 团队交流，避免和正在开发的功能冲突或者新特性不再对方的规划内
 
 ### 12.2 分发代码
 
+> 发布一个解决复杂问题的 React 组件也是做贡献的一种方式
+
+-   共享代码需要你遵循最佳实践，编写更好的代码
+-   代码要接受其他开发人员的反馈和评论
+-   承担维护仓库的责任
+-   修复漏洞，编写补丁并发布
+-   审查他人的 pull request
+
+一些优秀的实践：  
+1、编写全面的测试集  
+2、添加描述组件的 README 文件，其中包括使用示例、API 文档以及可用的 prop  
+3、在仓库中添加 LICENSE 文件，它可以提醒人们如何恰当地使用你的代码  
+4、尽量减小软件包并少用依赖  
+5、尽量少提供样式，允许用户自由配置组件
+
 ### 12.3 发布 npm 包
+
+开发完组件后，在 package.json 中配置好包名及版本等描述信息
+
+```
+// 必须拥有npm账户，以下命令创建账户
+npm adduser $username
+
+// 登录账户
+npm login
+
+// 发布组件
+npm publish
+
+// 修改库并发布新版
+npm version $type
+
+// 再次发布组件
+npm publish
+```
+
+</details>
