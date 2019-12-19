@@ -2180,23 +2180,333 @@ const Button = styled.button`
 
 <details>
 
+**通用应用**更有利于搜索引擎优化（SEO），能显著提升 Web 应用的感知速度，有助于提升用户转化率
+
 ### 8.1 通用应用
+
+React 在服务端渲染相同的组件称作 **服务端渲染** （server-side rendering，SSR）
+
+**同构应用** 就是指应用在服务端和客户端看起来一模一样
+
+**通用应用** 是指应用的代码可以同时用于服务端和客户端
 
 ### 8.2 使用服务端渲染的原因
 
 #### 8.2.1 SEO
 
+-   为方便主流搜索引擎的爬虫
+-   如果分别维护服务端代码供爬虫用、客户端供用户所用难度较大，且不够灵活
+-   避免分享空壳 HTML
+
 #### 8.2.2 通用代码库
+
+-   在客户端和服务端共享逻辑后，变更操作会变得更简单，不必再重复工作，错误和问题也大大减少
+-   在服务端引入 JavaScript 可以让前后端开发人员共享知识
+-   两端复用代码能够使合作变得更加方便，整个团队采用同种语言也有利于快速决策和修改
 
 #### 8.2.3 性能更强
 
+比起服务端托管的只有空的 HTML 和 script 标签，服务端渲染网站能让用户在访问页面时就能看到部分内容，从而增加留下来的可能性
+
+> 可以用服务端渲染极大地提升感知性能，因为我们可以在服务端输出组件并直接为用户返回一些信息
+
 #### 8.2.4 不要低估复杂度
+
+-   搭建和维护带有路由和逻辑的服务器、管理服务端数据流等
+-   可能需要缓存服务器内容，以便更快地输出页面
+-   维护功能完整的通用应用还有许多其他任务要完成
+
+> 建议先开发客户端版本，还有当 Web 应用能良好运行时，才应该采用服务端渲染改善体验
+
+应用场景：SEO、定制社交分享信息、提升感知速度
 
 ### 8.3 基础示例
 
+-   环境安装
+
+```
+// 新建一个空文件夹
+npm init
+// 生成package.json
+
+// 安装webpack插件依赖
+npm install --save-dev webpack  webpack-cli
+// 安装Babel及其加载器
+npm install --save-dev babel-loader@7.0 babel-core babel-preset-es2015 babel-preset-react
+
+// 安装服务端加载依赖
+npm install --save-dev webpack-node-externals
+
+npm install --save react react-dom express path
+
+// package.json中加入以下脚本
+"scripts": {
+    "build": "webpack",
+    "start": "node ./dist/server"
+}
+```
+
+-   新建一个`webpack.config.js`文件
+
+```
+const nodeExternals = require('webpack-node-externals')
+const path = require('path')
+
+const rules = [{
+  test: /\.js$/,
+  exclude: /(node_modules|bower_components)/,
+  loader: 'babel-loader',
+  query: {
+    presets: ['es2015', 'react']
+  }
+}]
+
+const client = {
+  entry: './src/client.js',
+  output: {
+    path: path.resolve(__dirname, './dist/public'),
+    filename: 'bundle.js'
+  },
+  module: {
+    rules
+  },
+  mode: 'production'
+}
+
+const server = {
+  entry: './src/server.js',
+  output: {
+    path: path.resolve(__dirname, './dist'),
+    filename: 'server.js'
+  },
+  module: {
+    rules
+  },
+  target: 'node',
+  mode: 'production',
+  externals: [nodeExternals()]
+}
+
+module.exports = [client, server]
+
+```
+
+-   新建 src 目录，目录下新建 app.js
+
+```
+import React from 'react'
+
+const App = () => <div> Hello React </div>
+
+export default App
+
+```
+
+-   新建 clent.js
+
+```
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from './app'
+
+ReactDOM.render(<App />, document.getElementById('app'))
+
+```
+
+-   template.js
+
+```
+export default body => `
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="UTF-8">
+    </head>
+    <body>
+      <div id="app">${body}</div>
+      <script src="/bundle.js"></script>
+    </body>
+  </html>`
+
+```
+
+-   server.js
+
+```
+import express from 'express'
+import React from 'react'
+import ReactDOM from 'react-dom/server'
+import App from './app'
+import template from './template'
+
+const app = express()
+
+app.use(express.static('dist/public'))
+
+app.get('/', (req, res) => {
+  const body = ReactDOM.renderToString(<App />)
+  const html = template(body)
+  res.send(html)
+})
+
+app.listen(3000, () => {
+  console.log('Listening on port 3000')
+})
+
+```
+
+运行命令  
+`npm run build`  
+`npm start`
+
 ### 8.4 数据获取示例
 
+引入新的依赖
+
+`npm install --save isomorphic-fetch prop-types`
+
+修改 app.js
+
+```
+import React from 'react'
+import PropTypes from 'prop-types'
+
+const App = ({ gists }) => (
+  <ul>
+    {gists.map(gist => (
+      <li key={gist.id}>{gist.description}</li>
+    ))}
+  </ul>
+)
+
+App.propTypes = { gists: PropTypes.array }
+
+export default App
+
+```
+
+修改 template.js
+
+```
+// 增加参数
+export default (body, gists) => `
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="UTF-8">
+    </head>
+    <body>
+      <div id="app">${body}</div>
+      <script>window.gists = ${JSON.stringify(gists)}</script>     // 增加这一行
+      <script src="/bundle.js"></script>
+    </body>
+  </html>`
+
+```
+
+修改 server.js
+
+```
+import express from 'express'
+import React from 'react'
+import ReactDOM from 'react-dom/server'
+import App from './app'
+import template from './template'
+// 引入新的依赖
+import fetch from 'isomorphic-fetch'
+
+const app = express()
+
+app.use(express.static('dist/public'))
+
+app.get('/', (req, res) => {
+  // 实现数据处理
+  fetch('https://api.github.com/users/gaearon/gists')
+    .then(response => response.json())
+    .then(gists => {
+      const body = ReactDOM.renderToString(<App gists={gists} />)
+      const html = template(body, gists)
+      res.send(html)
+    })
+})
+
+app.listen(3000, () => {
+  console.log('Listening on port 3000')
+})
+
+```
+
+修改 client.js
+
+```
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from './app'
+
+// 更改这里
+ReactDOM.render(
+  <App gists={window.gists} />,
+  document.getElementById('app')
+)
+
+```
+
+运行命令  
+`npm run build`  
+`npm start`
+
+访问 view-source:http://localhost:3000/ 可以看见 gist 数据，但页面会报错，因为客户端渲染时 gists 为 undefined
+
 ### 8.5 Next.js
+
+> `Next.js`可以极其方便地生成通用应用，无须关心配置文件。此外，它还大大减少了模板代码
+
+新文件加下  
+`npm init`  
+`npm install --save next react react-dom prop-types isomorphic-fetch`
+
+package.json 中配置
+
+```
+"scripts": {
+    "dev": "next"
+}
+```
+
+创建 pages/index.js
+
+```
+import React from 'react'
+import PropTypes from 'prop-types'
+import fetch from 'isomorphic-fetch'
+
+class App extends React.Component {
+  static async getInitialProps () {
+    const url = 'https://api.github.com/users/gaearon/gists'
+    const response = await fetch(url)
+    const gists = await response.json()
+    return {
+      gists
+    }
+  }
+
+  render () {
+    return (
+      <ul>
+        {this.props.gists.map(gist => (
+          <li key={gist.id}>{gist.description}</li>))}
+      </ul>
+    )
+  }
+}
+
+App.propTypes = { gists: PropTypes.array, }
+
+export default App
+
+```
+
+然后运行`npm run dev`
 
 </details>
 
