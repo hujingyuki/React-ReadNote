@@ -2516,17 +2516,101 @@ export default App
 
 ### 9.1 一致性比较与 key 属性
 
+> 显示组件时，React 会调用自己的`渲染方法`，还会递归调用子组件的渲染方法会返回 React 元素树,当组件状态发生变化时，通过`一致性比较`将渲染结果与之前的元素树进行比较，计算出最小操作集合。
+
+对比两个元素树时
+
+-   如果类型不同，则认为渲染的树也不同
+-   可以设置 key 标记子组件，使他们在不同渲染过程中得以保留
+
+> key 可以帮助 React 更快的渲染视图
+
+`react-addons-perf`在 React16 以下可以监测性能，16 以上版本可以直接在浏览器调试工具中查看
+
+> 为列表项设置`唯一确定`的 key 可以帮助 React 提高渲染性能
+
 ### 9.2 优化手段
+
+-   构建打包时要将 NODE_ENV 环境变量设置为 production
+-   压缩最终代码来减小体积，以便应用可以更快加载
+-   过早优化往往会带来不必要的复杂度
 
 #### 9.2.1 是否要更新组件
 
+`shouldComponentUpdate` 返回 false 时组件在父组件更新过程中不会重新渲染
+
+`React.PureComponent` 组件可以浅比较所有 props 和状态属性。它不会检查对象中嵌套的深层属性，并且有时会给出意外结果。
+
+> **只有检查过应用性能并找到瓶颈所在后**，才能使用 PureComponent，因为深度比较复杂对象所需要的开销可能比渲染方法本身更大
+
 #### 9.2.2 无状态函数式组件
+
+> 无状态组件实际上不会带来任何性能上的提升,也无法使用 shouldComponentUpdate 帮助 React 更快地渲染元素树
 
 ### 9.3 常用解决方案
 
+> 解决重渲染问题的一些常用工具和解决方案，找出可以进行优化的组件、学习如何重构复杂组件，将它们拆分成小型组件以获得更好的性能
+
 #### 9.3.1 why-did-you-update
 
+使用插件找出不需要更新的组件
+
+```
+npm install --save-dev why-did-you-update
+
+// 只在开发模式下使用
+if (process.env.NODE_ENV !== 'production') {
+    const { whyDidYouUpdate } = require('why-did-you-update')
+    whyDidYouUpdate(React)
+}
+// 运行后会输出可以避免渲染的组件信息，将不必要的组件设置为PureComponent以优化渲染性能
+```
+
 #### 9.3.2 在渲染方法中创建函数
+
+```
+render() {
+    return (
+        <div>
+            <ul>
+                {this.state.items.map(item => (
+                    <Item
+                        key={item}
+                        item={item}
+                        onClick={() => console.log(item)}
+                    />
+                ))}
+            </ul>
+        </div>
+    )
+}
+```
+
+使用`箭头函数`作为处理函数，每次渲染都会返回一个全新创建的函数
+
+因为需要知道函数是由那个组件触发所以不能再父组件之定义一次，解决方案是挪到 item 组件中实现
+
+```
+class Item extends React.PureComponent{
+    constructor(props) {
+        super(props)　
+        this.handleClick = this.handleClick.bind(this)
+    }
+    handleClick() {
+        this.props.onClick(this.props.item)
+    }
+
+    render() {
+        return (
+            <li onClick={this.handleClick}>
+                {this.props.item}
+            </li>
+        )
+    }
+}
+```
+
+> 在渲染方法中使用箭头函数（甚至在 constructor 方法中用 bind 绑定 this）的做法本身没什么问题，只不过实际使用 PureComponent 时要小心谨慎，确保不会引发不必要的重渲染
 
 #### 9.3.3 props 常量
 
