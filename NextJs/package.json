@@ -1,0 +1,23 @@
+{
+  "name": "nextjs",
+  "version": "1.0.0",
+  "description": "next.js",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next"
+  },
+  "keywords": [
+    "next.js"
+  ],
+  "author": "hujing",
+  "license": "ISC",
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1",
+    "next": "^9.1.6",
+    "prop-types": "^15.7.2",
+    "react": "^16.12.0"
+  },
+  "devDependencies": {
+    "react-dom": "^16.12.0"
+  }
+}
