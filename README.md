@@ -2614,15 +2614,205 @@ class Item extends React.PureComponent{
 
 #### 9.3.3 props 常量
 
+现在为 list 加入新的属性
+
+```
+render() {
+    return (
+        <div>
+            <ul>
+                {this.state.items.map(item => (
+                    <Item
+                        key={item}
+                        item={item}
+                        onClick={() => console.log(item)}
+                        status={['open','close']}
+                    />
+                ))}
+            </ul>
+             <button onClick={this.handleClick}>+</button>
+        </div>
+    )
+}
+```
+
+每次点击添加子元素时，status 传入的都是新的对象
+
+解决方案是创建一个 status 数组，每次传入相同的实例
+
+```
+const status=['open','close']
+render() {
+    return (
+        <div>
+            <ul>
+                {this.state.items.map(item => (
+                    <Item
+                        key={item}
+                        item={item}
+                        onClick={() => console.log(item)}
+                        status={status}
+                    />
+                ))}
+            </ul>
+             <button onClick={this.handleClick}>+</button>
+        </div>
+    )
+}
+```
+
 #### 9.3.4 重构与良好设计
+
+先创建一个基础的 todo 组件
+
+```
+class Todos extends React.Component{
+    constructor(props) {
+        super(props)　
+        this.state = {
+            items: ['foo', 'bar'],
+            value: ''
+        }
+        this.handleChange = this.handleChange.bind(this)
+        this.handleClick = this.handleClick.bind(this)
+    }
+
+    handleChange({ target }) {
+        this.setState({
+            value: target.value
+        })
+    }
+
+    handleClick() {
+        const items = this.state.items.slice()
+        items.unshift(this.state.value)　
+        this.setState({
+            items
+        })
+    }
+
+    render() {
+        return (
+            <div>
+                <ul>
+                    {this.state.items.map(item => <li key={item}>{item}</li>)}
+                </ul>
+                <div>
+                    <input
+                        type="text"
+                        value={this.state.value}
+                        onChange={this.handleChange}
+                    />
+                    <button onClick={this.handleClick}>+</button>
+                </div>
+            </div>
+        )
+    }
+}
+```
+
+列表项数量增多后，每次用户输入时都要渲染整个列表
+
+将组件拆分成更小的组件，分别完成列表项的渲染以及表单值的更改
+
+```
+// 父组件
+class Todos extends React.Component{
+    constructor(props) {
+        super(props)　
+        this.state = {
+            items: ['foo', 'bar']
+        }
+        this.handleSubmit = this.handleSubmit.bind(this)
+    }
+
+    handleSubmit(value) {
+        const items = this.state.items.slice()
+        items.unshift(value)　
+        this.setState({
+            items
+        })
+    }
+
+    render() {
+        return (
+            <div>
+                <List items={this.state.items} />
+                <Form onSubmit={this.handleSubmit} />
+            </div>
+        )
+    }
+}
+
+// 列表
+class List extends React.PureComponent{
+    render() {
+        return (
+            <ul>
+                {this.props.items.map(item => <li key={item}>{item}</li>)}
+            </ul>
+        )
+    }
+}
+
+// 表单
+class Form extends React.PureComponent{
+    constructor(props) {
+        super(props)　
+        this.state = {
+            value: ''
+        }　
+        this.handleChange = this.handleChange.bind(this)
+    }
+
+    handleChange({ target }) {
+        this.setState({
+            value: target.value
+        })
+    }
+
+    render() {
+        return (
+            <div>
+                <input
+                    type="text"
+                    value={this.state.value}
+                    onChange={this.handleChange}
+                />
+                <button
+                    onClick={() => this.props.onSubmit(this.state.value)}
+                >+</button>
+            </div>
+        )
+    }
+}
+```
 
 ### 9.4 工具与库
 
 #### 9.4.1 不可变性
 
+传入 prop 时，如果属性为对象可能无法检测到属性值得变化，解决方案是传入不可变数据，每次传入新的对象
+
+```
+const obj = { ...this.state.obj, foo: 'bar' }
+this.setState({ obj })
+```
+
+也可以使用插件`immutable.js`
+
 #### 9.4.2 性能监控工具
 
+上文中有提到 Perf 插件（在新版的 react 中已经不支持了),更好的解决方案是使用 chrome 浏览器的 chrome-react-perf 扩展
+
+react-perf-tool 可以为我们在浏览器窗口中提供一个美观的界面管理 perf 插件
+
 #### 9.4.3 Babel 插件
+
+-   **React 常量元素转换器** babel-plugin-transform-react-constant-elements
+-   **React 行内元素转换器** babel-plugin-transform-react-inline-elements
+
+这两个插件都只应该在生产环境中启用，因为它们会使开发环境中的调试变得很困难
 
 </details>
 
