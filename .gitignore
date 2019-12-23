@@ -32,9 +32,7 @@ local.properties
 
 # node.js
 #
-design/node_modules/
-NextJs/node_modules/
-ssr/node_modules/
+*/node_modules/
 .vscode/
 .tmp/
 npm-debug.log
