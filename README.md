@@ -2832,6 +2832,130 @@ react-perf-tool 可以为我们在浏览器窗口中提供一个美观的界面�
 
 ### 10.2 用 Jest 轻松测试 JavaScript
 
+```
+// 新建文件夹
+npm init
+
+npm i -D babel-loader @babel/core @babel/preset-env @babel/preset-react babel-jest jest react-addons-test-utils
+
+// 新建.babelrc
+{
+  "presets": ["@babel/preset-env", "@babel/preset-react"]
+}
+
+npm install --save react react-dom
+
+```
+
+> 官方文档已将测试工具类移入 react-dom/test-utils，渲染方法移入 react-test-renderer
+
+```
+npm remove react-addons-test-utils
+```
+
+新建 button.js
+
+```
+import React from 'react'
+
+class Button extends React.Component {
+  render () {
+    return <div />
+  }
+}
+
+export default Button
+
+```
+
+新建 button.spec.js
+
+```
+import React from 'react'
+import TestUtils from 'react-dom/test-utils'
+import Button from './button'
+
+test('works', () => {
+  expect(true).toBe(true)
+})
+
+```
+
+执行 `npm test` 控制台输出结果 pass
+
+测试 React 组件的方式一般有两种
+
+-   浅渲染
+-   将组件挂载到独立 DOM 中
+
+> `浅渲染`允许你按**一级深度**渲染组件，然后根据它返回的渲染结果进行一些预测
+
+**一级深度渲染**指将组件隔离出来测试，即使其中包含一些很复杂的子组件，它们也不会被渲染，就算它们发生变化或者加载失败，也不影响测试结果
+
+```
+import React from 'react'
+
+class Button extends React.Component {
+  render () {
+    return <button> {this.props.text} </button>
+  }
+}
+
+export default Button
+
+```
+
+```
+import React from 'react'
+import TestRenderer from 'react-test-renderer'
+import Button from './button'
+
+test('renders with text', () => {
+  const text = '123'
+  const testRenderer = TestRenderer.create(<Button text={text} />)
+  const testInstance = testRenderer.root
+  expect(testInstance.props.text).toBe(text)
+  // expect(testInstance.type).toBe('[Function Button]')
+})
+
+```
+
+测试点击事件，需要用到 mock 函数
+
+```
+
+import React from 'react'
+
+class Button extends React.Component {
+  render () {
+    return <button onClick={this.props.onClick}> {this.props.text} </button>
+  }
+}
+
+export default Button
+
+```
+
+```
+npm i -D jest-mock
+
+import React from 'react'
+import TestUtils from 'react-dom/test-utils'
+import TestRenderer from 'react-test-renderer'
+import jest from 'jest-mock'
+import Button from './button'
+
+
+test('fires the onClick callback', () => {
+  const onClick = jest.fn()
+  const tree = TestUtils.renderIntoDocument(<Button onClick={onClick} />)
+  const button = TestUtils.findRenderedDOMComponentWithTag(tree, 'button')
+  TestUtils.Simulate.click(button)
+  expect(onClick).toBeCalled()
+})
+
+```
+
 ### 10.3 灵活的测试框架 Mocha
 
 ### 10.4 React JavaScript 测试工具
