@@ -2907,15 +2907,21 @@ export default Button
 
 ```
 import React from 'react'
-import TestRenderer from 'react-test-renderer'
+import TestUtils from 'react-dom/test-utils'
+import ShallowRenderer from 'react-test-renderer/shallow'
 import Button from './button'
+
+test('works', () => {
+  expect(true).toBe(true)
+})
 
 test('renders with text', () => {
   const text = '123'
-  const testRenderer = TestRenderer.create(<Button text={text} />)
-  const testInstance = testRenderer.root
-  expect(testInstance.props.text).toBe(text)
-  // expect(testInstance.type).toBe('[Function Button]')
+  const renderer = new ShallowRenderer()
+  renderer.render(<Button text={text} />)
+  const button = renderer.getRenderOutput()
+  expect(button.type).toBe('button')
+  expect(button.props.children).toBe(text)
 })
 
 ```
@@ -2957,6 +2963,73 @@ test('fires the onClick callback', () => {
 ```
 
 ### 10.3 灵活的测试框架 Mocha
+
+新建文件夹
+
+```
+npm init
+
+npm install --save-dev mocha
+
+npm i -D babel-loader @babel/core @babel/preset-env @babel/preset-react @babel/register
+
+npm install --save react react-dom
+
+npm install --save-dev chai chai-spies jsdom react-test-renderer
+```
+
+新建 test/button.spec.js 文件 mocha 默认执行 test 下的测试
+
+```
+import chai, { expect } from 'chai';
+import React from 'react'
+import spies from 'chai-spies'
+import { JSDOM } from 'jsdom'
+import TestUtils from 'react-dom/test-utils'
+import ShallowRenderer from 'react-test-renderer/shallow'
+import Button from '../button'
+
+const spy = chai.use(spies).spy
+
+const { document } = new JSDOM('').window
+global.document = document
+global.window = document.defaultView
+
+describe('Button', () => {
+  it('renders with text', () => {
+    const text = 'text'
+    const renderer = new ShallowRenderer()
+	  renderer.render(<Button text={text} />)
+    const button = renderer.getRenderOutput()
+    expect(button.type).to.equal('button')
+	  expect(button.props.children).to.equal(text)
+  })
+
+  it('fires the onClick callback', () => {
+    const onClick = spy()
+    const tree = TestUtils.renderIntoDocument(<Button onClick={onClick} />)
+    const button = TestUtils.findRenderedDOMComponentWithTag(tree, 'button')
+    TestUtils.Simulate.click(button)
+    expect(onClick).to.be.called()
+  })
+})
+
+```
+
+button.js 同上
+
+```
+import React from 'react'
+
+class Button extends React.Component {
+  render () {
+    return <button onClick={this.props.onClick}>{this.props.text}</button>
+  }
+}
+
+export default Button
+
+```
 
 ### 10.4 React JavaScript 测试工具
 

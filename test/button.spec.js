@@ -1,6 +1,6 @@
 import React from 'react'
 import TestUtils from 'react-dom/test-utils'
-import TestRenderer from 'react-test-renderer'
+import ShallowRenderer from 'react-test-renderer/shallow'
 import jest from 'jest-mock'
 import Button from './button'
 
@@ -10,10 +10,11 @@ test('works', () => {
 
 test('renders with text', () => {
   const text = '123'
-  const testRenderer = TestRenderer.create(<Button text={text} />)
-  const testInstance = testRenderer.root
-  expect(testInstance.props.text).toBe(text)
-  // expect(testInstance.type).toBe('[Function Button]')
+  const renderer = new ShallowRenderer()
+  renderer.render(<Button text={text} />)
+  const button = renderer.getRenderOutput()
+  expect(button.type).toBe('button')
+  expect(button.props.children).toBe(text)
 })
 
 test('fires the onClick callback', () => {
