@@ -2999,10 +2999,10 @@ describe('Button', () => {
   it('renders with text', () => {
     const text = 'text'
     const renderer = new ShallowRenderer()
-	  renderer.render(<Button text={text} />)
+	renderer.render(<Button text={text} />)
     const button = renderer.getRenderOutput()
     expect(button.type).to.equal('button')
-	  expect(button.props.children).to.equal(text)
+	expect(button.props.children).to.equal(text)
   })
 
   it('fires the onClick callback', () => {
@@ -3033,11 +3033,215 @@ export default Button
 
 ### 10.4 React JavaScript 测试工具
 
+**Enzyme 插件使用**
+
+回到 jest 测试目录
+
+```
+npm install --save-dev enzyme enzyme-adapter-react-16
+```
+
+button.spec.js
+
+```
+import React from 'react'
+import { shallow, configure } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
+import Button from './button'
+import jest from 'jest-mock'
+
+configure({ adapter: new Adapter() })
+
+test('renders with text', () => {
+  const text = '123'
+  const button = shallow(<Button text={text} />)
+  expect(button.type()).toBe('button')
+  expect(button.text()).toBe(text)
+})
+
+test('fires the onClick callback', () => {
+  const onClick = jest.fn()
+  const button = shallow(<Button onClick={onClick} />)
+  button.simulate('click')
+  expect(onClick).toBeCalled()
+})
+
+```
+
 ### 10.5 真实测试示例
+
+todoTextInput.js
+
+```
+import React from 'react'
+import PropTypes from 'prop-types'
+import classnames from 'classnames'
+
+class TodoTextInput extends React.Component {
+  static propTypes = {
+    onSave: PropTypes.func.isRequired,
+    text: PropTypes.string,
+    placeholder: PropTypes.string,
+    editing: PropTypes.bool,
+    newTodo: PropTypes.bool
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      text: this.props.text || ''
+    }
+  }
+
+  handleSubmit = e => {
+    const text = e.target.value.trim()
+    if (e.which === 13) {
+      this.props.onSave(text)
+      if (this.props.newTodo) {
+        this.setState({
+          text: ''
+        })
+      }
+    }
+  }
+
+  handleChange = e => {
+    this.setState({
+      text: e.target.value
+    })
+  }
+
+  handleBlur = e => {
+    if (!this.props.newTodo) {
+      this.props.onSave(e.target.value)
+    }
+  }
+
+  render() {
+    return (
+      <input
+        className = {
+          classnames({
+            edit: this.props.editing,
+            'new-todo': this.props.newTodo
+          })
+        }
+        type = "text"
+        placeholder = {this.props.placeholder}
+        autoFocus = "true"
+        value = {this.state.text}
+        onBlur = {this.handleBlur}
+        onChange = {this.handleChange}
+        onKeyDown = {this.handleSubmit}
+      />
+    )
+  }
+}
+
+export default TodoTextInput
+
+```
+
+todoTextInput.spec.js
+
+```
+import React from 'react'
+import { shallow, configure } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
+import jest from 'jest-mock'
+import TodoTextInput from './todoTextInput'
+
+configure({ adapter: new Adapter() })
+
+const noop = () => {}
+test('sets the text prop as value', () => {
+  const text = 'text'
+  const wrapper = shallow(
+    <TodoTextInput text={text} onSave={noop} />
+  )
+  expect(wrapper.prop('value')).toBe(text)
+})
+
+test('uses the placeholder prop', () => {
+  const placeholder = 'placeholder'
+  const wrapper = shallow(
+    <TodoTextInput placeholder={placeholder} onSave={noop} />
+  )
+  expect(wrapper.prop('placeholder')).toBe(placeholder)
+})
+
+test('applies the right class names', () => {
+  const wrapper = shallow(
+    <TodoTextInput editing newTodo onSave={noop} />
+  )
+  expect(wrapper.hasClass('edit new-todo')).toBe(true)
+})
+
+test('fires onSave on enter', () => {
+  const onSave = jest.fn()
+  const value = 'value'
+  const wrapper = shallow(<TodoTextInput onSave={onSave} />)
+  wrapper.simulate('keydown', { target: { value }, which: 13 })
+  expect(onSave).toHaveBeenCalledWith(value)
+})
+
+ test('does not fire onSave on key down', () => {
+  const onSave = jest.fn()
+  const wrapper = shallow( <TodoTextInput onSave={onSave} />)
+  wrapper.simulate('keydown', { target: { value: '' } })
+  expect(onSave).not.toBeCalled()
+})
+
+test('clears the value after save if new', () => {
+  const value = 'value'
+  const wrapper = shallow(<TodoTextInput newTodo onSave={noop} />)
+  wrapper.simulate('keydown', { target: { value }, which: 13 })
+  expect(wrapper.prop('value')).toBe('')
+})
+
+test('updates the text on change', () => {
+  const value = 'value'
+  const wrapper = shallow(<TodoTextInput onSave={noop} />)
+  wrapper.simulate('change', { target: { value } })
+  expect(wrapper.prop('value')).toBe(value)
+})
+
+test('fires onSave on blur if not new', () => {
+  const onSave = jest.fn()
+  const value = 'value'
+  const wrapper = shallow(<TodoTextInput onSave={onSave} />)
+  wrapper.simulate('blur', { target: { value } })
+  expect(onSave).toHaveBeenCalledWith(value)
+})
+
+```
 
 ### 10.6 React 组件树快照测试
 
+```
+import React from 'react'
+import renderer from 'react-test-renderer'
+import TodoTextInput from './todoTextInput'
+
+test('snapshots are awesome', () => {
+  const component = renderer.create(<TodoTextInput onSave={() => {}} />)
+  const tree = component.toJSON()
+  expect(tree).toMatchSnapshot()
+})
+
+```
+
+运行`npm test`后会生成快照文件，为组件增加一个属性再次执行 `npm test`会得到提示，生成的快照不同，可以使用`npm test -- -u`更新快照
+
 ### 10.7 代码覆盖率工具
+
+package.json 中加入 jest 配置项，再执行`npm test`
+
+```
+"jest": {
+    "collectCoverage": true
+}
+```
 
 ### 10.8 常用测试方案
 
@@ -3047,7 +3251,30 @@ export default Button
 
 ### 10.9 React 开发者工具
 
+-   可以审查渲染的组件树
+-   可以检查组件在特定时间的内部状态与接收的属性
+-   可读取 props 和状态对象
+-   可以实时修改它们以触发 UI 更新并直接查看结果
+-   启用 Trace React Updates 功能后，就可以在使用应用时直观地看到执行某个特殊操作会更新哪个组件。更新后的组件会用红色矩形框高亮显示，这样就能很方便地定位需要优化的地方
+
 ### 10.10 React 错误处理
+
+-   通知用户，帮助他们理解发生了什么情况，并告诉他们应该怎么做
+-   收集与错误相关的一切信息以及应用状态，以便快速重现并修复 bug
+-   给渲染方法加上猴子补丁封装进（try catch）中 `react-component-errors`可以实现这功能
+
+```
+npm install --save react-component-errors
+
+import wrapReactLifecycleMethods from 'react-component-errors'
+
+// 然后用它装饰类
+@wrapReactLifecycleMethods
+class MyComponents extends React.Component
+...
+```
+
+> 生产环境中应该禁用这个插件
 
 </details>
 
