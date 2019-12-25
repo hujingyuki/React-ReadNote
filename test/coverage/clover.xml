@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1577288051527" clover="3.2.0">
+  <project timestamp="1577288051527" name="All files">
+    <metrics statements="16" coveredstatements="16" conditionals="8" coveredconditionals="8" methods="6" coveredmethods="6" elements="30" coveredelements="30" complexity="0" loc="16" ncloc="16" packages="1" files="2" classes="2"/>
+    <file name="button.js" path="/Users/hujingyuki/Desktop/workplace/github/React-ReadNote/test/button.js">
+      <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <line num="5" count="4" type="stmt"/>
+    </file>
+    <file name="todoTextInput.js" path="/Users/hujingyuki/Desktop/workplace/github/React-ReadNote/test/todoTextInput.js">
+      <metrics statements="15" coveredstatements="15" conditionals="8" coveredconditionals="8" methods="5" coveredmethods="5"/>
+      <line num="6" count="2" type="stmt"/>
+      <line num="15" count="10" type="stmt"/>
+      <line num="16" count="10" type="stmt"/>
+      <line num="21" count="10" type="stmt"/>
+      <line num="22" count="3" type="stmt"/>
+      <line num="23" count="3" type="cond" truecount="2" falsecount="0"/>
+      <line num="24" count="2" type="stmt"/>
+      <line num="25" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="26" count="1" type="stmt"/>
+      <line num="33" count="10" type="stmt"/>
+      <line num="34" count="1" type="stmt"/>
+      <line num="39" count="10" type="stmt"/>
+      <line num="40" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="41" count="1" type="stmt"/>
+      <line num="46" count="12" type="stmt"/>
+    </file>
+  </project>
+</coverage>
