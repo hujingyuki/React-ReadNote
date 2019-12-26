@@ -3247,7 +3247,194 @@ package.json 中加入 jest 配置项，再执行`npm test`
 
 #### 10.8.1 测试高阶组件
 
+withData.js
+
+```
+import React from 'react'
+import getJSON from './get-json'
+
+const withData = url => Component => (
+  class extends React.Component {
+    constructor (props) {
+      super(props)
+      this.state = { data: [] }
+    }
+
+    componentDidMount () {
+      const endpoint = typeof url === 'function' ? url(this.props) : url
+      getJSON(endpoint).then(data => this.setState({ data }))
+    }
+
+    render () {
+      return <Component {...this.props} {...this.state} />
+    }
+  }
+)
+
+export default withData
+
+```
+
+withData.spec.js
+
+```
+import React from 'react'
+import { shallow, mount, configure } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
+import jest from 'jest-mock'
+import withData from './withData'
+import getJSON from './get-json'
+
+// jest.mock一直在报错
+jest.mock('./get-json')
+
+configure({
+  adapter: new Adapter()
+})
+
+const data = 'data'
+const List = () => <div />
+
+// jest.mock('./get-json', () => (jest.fn(() => ({
+//   then: callback => callback(data)
+// }))))
+
+test('passes the props to the component', () => {
+  const ListWithGists = withData()(List)
+  const username = 'gaearon'
+  const wrapper = shallow(<ListWithGists username={username} />)
+  expect(wrapper.prop('username')).toBe(username)
+})
+
+test('uses the string url', () => {
+  const url = 'https://api.github.com/users/gaearon/gists'
+  const withGists = withData(url)
+  const ListWithGists = withGists(List)
+  mount(<ListWithGists />)
+  expect(getJSON).toHaveBeenCalledWith(url)
+})
+
+test('uses the function url', () => {
+  const url = jest.fn(props => (`https://api.github.com/users/${props.username}/gists`))
+  const withGists = withData(url)
+  const ListWithGists = withGists(List)
+  const props = { username: 'gaearon' }
+  mount(<ListWithGists {...props} />)
+  expect(url).toHaveBeenCalledWith(props)
+  expect(getJSON).toHaveBeenCalledWith('https://api.github.com/users/gaearon/gists')
+})
+
+test('passes the data to the component', () => {
+  const ListWithGists = withData()(List)
+  const wrapper = mount(<ListWithGists />)
+  expect(wrapper.prop('data')).toEqual(data)
+})
+
+```
+
 #### 10.8.2 页面对象模式
+
+controlled.js
+
+```
+import React from 'react'
+
+export default class Controlled extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      firstName: 'Dan',
+      lastName: 'Abramov'
+    }
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  handleChange ({ target }) {
+    this.setState({
+      [target.name]: target.value
+    })
+  }
+
+  handleSubmit (e) {
+    e.preventDefault()
+    this.props.onSubmit(`${this.state.firstName} ${this.state.lastName}`)
+  }
+
+  render () {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <input
+          type='text'
+          name='firstName'
+          value={this.state.firstName}
+          onChange={this.handleChange}
+        />
+        <input
+          type='text'
+          name='lastName'
+          value={this.state.lastName}
+          onChange={this.handleChange}
+        />
+        <button>Submit</button>
+      </form>
+    )
+  }
+}
+
+```
+
+定义页面对象可以避免多次书写重复的代码
+
+controlled.spec.js
+
+```
+import React from 'react'
+import {
+  shallow,
+  mount,
+  configure
+} from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
+import jest from 'jest-mock'
+import Controlled from './controlled'
+
+configure({
+  adapter: new Adapter()
+})
+
+class Page {
+  constructor (wrapper) {
+    this.wrapper = wrapper
+  }
+
+  fill (name, value) {
+    const field = this.wrapper.find(`[name="${name}"]`)
+    field.simulate('change', {
+      target: {
+        name,
+        value
+      }
+    })
+  }
+
+  submit () {
+    const form = this.wrapper.find('form')
+    form.simulate('submit', { preventDefault () {} })
+  }
+}
+
+test('submits the form', () => {
+  const onSubmit = jest.fn()
+  const wrapper = shallow(<Controlled onSubmit={onSubmit} />)
+  const page = new Page(wrapper)
+  page.fill('firstName', 'Christopher')
+  page.fill('lastName', 'Chedeau')
+  page.submit()
+  expect(onSubmit).toHaveBeenCalledWith('Christopher Chedeau')
+})
+
+```
 
 ### 10.9 React 开发者工具
 
